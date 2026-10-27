@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>匠心工地</title>
+  <meta name="theme-color" content="#e8790c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="匠心工地">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="page-title">單位換算</h1>
+  </header>
+
+  <main>
+    <!-- 單位換算 -->
+    <section id="tab-convert" class="tab active">
+      <div class="card">
+        <div class="chips" id="unit-groups"></div>
+        <div class="row">
+          <input id="conv-value" type="number" inputmode="decimal" value="1" aria-label="數值">
+          <select id="conv-unit" aria-label="單位"></select>
+        </div>
+        <ul class="results" id="conv-results"></ul>
+      </div>
+
+      <div class="card">
+        <h2>木材材積（才）</h2>
+        <div class="grid2">
+          <label>寬（台寸）<input id="tm-w" type="number" inputmode="decimal"></label>
+          <label>厚（台寸）<input id="tm-t" type="number" inputmode="decimal"></label>
+          <label>長（台尺）<input id="tm-l" type="number" inputmode="decimal"></label>
+          <label>數量（支）<input id="tm-q" type="number" inputmode="numeric" value="1"></label>
+        </div>
+        <div class="big-result" id="tm-result">—</div>
+        <p class="hint">公式：寬 × 厚 × 長 × 數量 ÷ 10 = 才</p>
+      </div>
+
+      <div class="card">
+        <h2>坪數計算</h2>
+        <div class="grid2">
+          <label>長<input id="pg-l" type="number" inputmode="decimal"></label>
+          <label>寬<input id="pg-w" type="number" inputmode="decimal"></label>
+        </div>
+        <div class="row">
+          <span>單位</span>
+          <select id="pg-unit">
+            <option value="m">公尺</option>
+            <option value="cm">公分</option>
+            <option value="taichi">台尺</option>
+            <option value="ft">英呎</option>
+          </select>
+        </div>
+        <div class="big-result" id="pg-result">—</div>
+      </div>
+    </section>
+
+    <!-- 工班紀錄 -->
+    <section id="tab-crew" class="tab">
+      <div class="card">
+        <div class="row">
+          <button class="icon-btn" data-crew-shift="-1" aria-label="前一天">‹</button>
+          <input id="crew-day" type="date">
+          <button class="icon-btn" data-crew-shift="1" aria-label="後一天">›</button>
+        </div>
+        <div class="summary" id="crew-summary"></div>
+        <ul class="list" id="crew-list"></ul>
+      </div>
+
+      <form class="card" id="crew-form">
+        <h2 id="crew-form-title">新增工班紀錄</h2>
+        <input type="hidden" name="id">
+        <label>日期<input name="date" type="date" required></label>
+        <label>工地地點<input name="site" list="dl-sites" required placeholder="例：中和 景平路案"></label>
+        <label>人員<input name="worker" list="dl-workers" required placeholder="多人用逗號或空白隔開"></label>
+        <div class="chips small" id="worker-chips"></div>
+        <div class="grid2">
+          <label>上工<input name="start" type="time" value="08:00" required></label>
+          <label>收工<input name="end" type="time" value="17:00" required></label>
+          <label>休息（分鐘）<input name="breakMin" type="number" inputmode="numeric" value="60"></label>
+          <label>日薪（每人，可空白）<input name="wage" type="number" inputmode="numeric"></label>
+        </div>
+        <label>工作內容／備註<input name="note" placeholder="例：二樓模板"></label>
+        <div class="row">
+          <button type="submit" class="primary">儲存</button>
+          <button type="button" class="ghost" id="crew-cancel" hidden>取消編輯</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 收支帳務 -->
+    <section id="tab-ledger" class="tab">
+      <div class="card">
+        <div class="row">
+          <button class="icon-btn" data-ledger-shift="-1" aria-label="上個月">‹</button>
+          <input id="ledger-month" type="month">
+          <button class="icon-btn" data-ledger-shift="1" aria-label="下個月">›</button>
+        </div>
+        <div class="totals" id="ledger-totals"></div>
+        <div id="ledger-list"></div>
+      </div>
+
+      <form class="card" id="ledger-form">
+        <h2 id="ledger-form-title">新增一筆</h2>
+        <input type="hidden" name="id">
+        <div class="segmented">
+          <label><input type="radio" name="type" value="expense" checked><span>支出</span></label>
+          <label><input type="radio" name="type" value="income"><span>收入</span></label>
+        </div>
+        <label>日期<input name="date" type="date" required></label>
+        <label>金額（元）<input name="amount" type="number" inputmode="decimal" required min="0" step="any"></label>
+        <label>類別<input name="category" list="dl-categories" required></label>
+        <div class="chips small" id="category-chips"></div>
+        <label>工地<input name="site" list="dl-sites" placeholder="可空白"></label>
+        <label>備註<input name="note"></label>
+        <div class="row">
+          <button type="submit" class="primary">儲存</button>
+          <button type="button" class="ghost" id="ledger-cancel" hidden>取消編輯</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 匯出 / 備份 -->
+    <section id="tab-export" class="tab">
+      <div class="card">
+        <h2>匯出 Excel</h2>
+        <div class="grid2">
+          <label>從<input id="ex-from" type="date"></label>
+          <label>到<input id="ex-to" type="date"></label>
+        </div>
+        <div class="chips small" id="ex-presets">
+          <button type="button" class="chip" data-preset="month">本月</button>
+          <button type="button" class="chip" data-preset="lastmonth">上個月</button>
+          <button type="button" class="chip" data-preset="year">今年</button>
+          <button type="button" class="chip" data-preset="all">全部</button>
+        </div>
+        <button class="primary block" id="ex-xlsx">匯出 Excel 檔</button>
+        <p class="hint">檔案包含：工班紀錄、收支明細、每日收支、每月收支四個工作表。</p>
+      </div>
+
+      <div class="card">
+        <h2>備份與還原</h2>
+        <p class="hint" id="data-stats"></p>
+        <button class="block" id="bk-save">下載備份檔</button>
+        <button class="block" id="bk-load">從備份檔還原</button>
+        <input type="file" id="bk-file" accept=".json,application/json" hidden>
+        <p class="hint">資料只存在這支手機裡。建議每週下載一次備份，存到雲端硬碟或傳給自己。</p>
+      </div>
+
+      <div class="card">
+        <h2>關於</h2>
+        <p class="hint">匠心工地 v1.0 · 可離線使用</p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="convert" class="active"><span class="ico">📐</span>換算</button>
+    <button data-tab="crew"><span class="ico">👷</span>工班</button>
+    <button data-tab="ledger"><span class="ico">💰</span>帳務</button>
+    <button data-tab="export"><span class="ico">📤</span>匯出</button>
+  </nav>
+
+  <datalist id="dl-sites"></datalist>
+  <datalist id="dl-workers"></datalist>
+  <datalist id="dl-categories"></datalist>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

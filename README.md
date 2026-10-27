@@ -1,0 +1,49 @@
+# 匠心工地
+
+給工地用的手機 App：台灣常用單位換算、工班出勤紀錄、每日收支帳務，沒網路也能用，可匯出 Excel。
+
+## 功能
+
+- **單位換算**：長度（台尺、台寸、台分、公尺、英呎、英吋…）、面積（坪、才、平方公尺、甲、分…）、材積（才、石、立方公尺、板呎…）、重量（台斤、台兩、公斤、磅）
+- **木材材積計算**：寬(台寸) × 厚(台寸) × 長(台尺) × 數量 ÷ 10 = 才
+- **坪數計算**：長 × 寬 換算坪數
+- **工班紀錄**：日期、工地地點、人員（可一次輸入多人）、上工／收工時間、休息時間、日薪、工作內容，自動算工時
+- **收支帳務**：收入、支出、類別、工地、備註，每日與每月合計
+- **匯出 Excel**：工班紀錄、收支明細、每日收支、每月收支四個工作表
+- **備份與還原**：下載備份檔，換手機時可以還原
+
+資料只存在手機裡，不會上傳到任何地方。
+
+## 安裝
+
+### Android App（APK）
+
+到 [Releases](../../releases/latest) 下載 `JiangXin.apk`，在手機上點開安裝。第一次安裝需要允許「安裝不明來源的應用程式」。
+
+### PWA（Android / iPhone 都可以）
+
+用手機瀏覽器打開 GitHub Pages 網址，然後：
+
+- Android Chrome：選單 →「加到主畫面」或「安裝應用程式」
+- iPhone Safari：分享 →「加入主畫面」
+
+打開過一次之後，沒網路也能使用。
+
+> 注意：APK 和 PWA 的資料是分開存的。如果要換用另一種，先用「匯出 → 下載備份檔」再到另一邊還原。
+
+## 開發
+
+```
+www/                 App 本體（HTML / CSS / JS，不需要編譯）
+  js/units.js        單位換算資料
+  js/store.js        本機資料存取
+  js/export.js       Excel 匯出、備份檔
+  sw.js              離線快取
+assets/              App 圖示原檔
+capacitor.config.json  Android App 設定
+.github/workflows/   自動打包 APK、發佈 PWA
+```
+
+本機預覽：`npm run serve`，然後打開 http://localhost:8080
+
+打包 Android：`npm install && npm run android:prepare`，再用 Android Studio 開啟 `android/` 資料夾。推到 GitHub 時會自動打包 APK。
