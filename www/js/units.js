@@ -83,3 +83,18 @@ export function formatNumber(n, digits = 4) {
   if (abs >= 1e9 || abs < 1e-6) return n.toExponential(3);
   return n.toLocaleString('zh-TW', { maximumFractionDigits: digits });
 }
+
+// 台灣常用鋼筋（CNS 560）：號數、標稱直徑、單位重 kg/m
+export const REBARS = [
+  { no: '#3', d: 'D10', kgm: 0.56 },
+  { no: '#4', d: 'D13', kgm: 0.994 },
+  { no: '#5', d: 'D16', kgm: 1.56 },
+  { no: '#6', d: 'D19', kgm: 2.25 },
+  { no: '#7', d: 'D22', kgm: 3.04 },
+  { no: '#8', d: 'D25', kgm: 3.98 },
+  { no: '#9', d: 'D29', kgm: 5.08 },
+  { no: '#10', d: 'D32', kgm: 6.39 },
+  { no: '#11', d: 'D36', kgm: 7.9 },
+];
+
+export const US_GALLON_L = 3.785411784;

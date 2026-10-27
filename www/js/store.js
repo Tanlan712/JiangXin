@@ -2,7 +2,7 @@
 const KEY = 'jiangxin-data-v1';
 
 function emptyData() {
-  return { crew: [], ledger: [] };
+  return { crew: [], ledger: [], invoices: [], templates: [] };
 }
 
 let data = load();
@@ -30,6 +30,10 @@ export function all(kind) {
   return data[kind];
 }
 
+export function get(kind, id) {
+  return data[kind].find((r) => r.id === id);
+}
+
 export function upsert(kind, record) {
   const list = data[kind];
   if (record.id) {
@@ -37,13 +41,21 @@ export function upsert(kind, record) {
     if (i >= 0) list[i] = record;
     else list.push(record);
   } else {
-    list.push({ ...record, id: newId() });
+    record = { ...record, id: newId() };
+    list.push(record);
   }
   save();
+  return record;
 }
 
 export function addMany(kind, records) {
   for (const r of records) data[kind].push({ ...r, id: newId() });
+  save();
+}
+
+export function patch(kind, ids, fields) {
+  const set = new Set(ids);
+  for (const r of data[kind]) if (set.has(r.id)) Object.assign(r, fields);
   save();
 }
 
@@ -61,7 +73,7 @@ export function importJSON(text) {
   if (!Array.isArray(parsed.crew) || !Array.isArray(parsed.ledger)) {
     throw new Error('檔案格式不對');
   }
-  data = { crew: parsed.crew, ledger: parsed.ledger };
+  data = { ...emptyData(), crew: parsed.crew, ledger: parsed.ledger, invoices: parsed.invoices || [], templates: parsed.templates || [] };
   save();
 }
 

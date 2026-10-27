@@ -44,7 +44,7 @@ function sheet(rows, widths) {
   return ws;
 }
 
-export async function exportWorkbook({ crew, ledger, from, to, crewHours }) {
+export async function exportWorkbook({ crew, ledger, invoices = [], payroll = [], from, to, crewHours }) {
   const wb = XLSX.utils.book_new();
   const byDate = (a, b) => a.date.localeCompare(b.date);
 
@@ -53,12 +53,12 @@ export async function exportWorkbook({ crew, ledger, from, to, crewHours }) {
     wb,
     sheet(
       [
-        ['日期', '工地地點', '人員', '上工', '收工', '休息(分)', '工時(小時)', '日薪', '工作內容／備註'],
-        ...crewRows.map((r) => [r.date, r.site, r.worker, r.start, r.end, r.breakMin, Math.round(crewHours(r) * 100) / 100, r.wage === '' ? '' : r.wage, r.note]),
+        ['日期', '工地地點', '人員', '上工', '收工', '休息(分)', '工時(小時)', '日薪', '付款', '工作內容／備註'],
+        ...crewRows.map((r) => [r.date, r.site, r.worker, r.start, r.end, r.breakMin, Math.round(crewHours(r) * 100) / 100, r.wage === '' ? '' : r.wage, r.wage ? (r.paid ? '已付' : '未付') : '', r.note]),
         [],
         ['合計', '', '', '', '', '', crewRows.reduce((s, r) => s + crewHours(r), 0), crewRows.reduce((s, r) => s + (Number(r.wage) || 0), 0)],
       ],
-      [12, 18, 10, 7, 7, 9, 10, 9, 24],
+      [12, 18, 10, 7, 7, 9, 10, 9, 6, 24],
     ),
     '工班紀錄',
   );
@@ -93,6 +93,30 @@ export async function exportWorkbook({ crew, ledger, from, to, crewHours }) {
   };
   XLSX.utils.book_append_sheet(wb, sheet([['日期', '收入', '支出', '結餘'], ...summarize((r) => r.date)], [12, 11, 11, 11]), '每日收支');
   XLSX.utils.book_append_sheet(wb, sheet([['月份', '收入', '支出', '結餘'], ...summarize((r) => r.date.slice(0, 7))], [10, 11, 11, 11]), '每月收支');
+
+  XLSX.utils.book_append_sheet(
+    wb,
+    sheet(
+      [
+        ['師傅', '出工天數', '工時(小時)', '應付', '已付', '未付'],
+        ...payroll.map((p) => [p.worker, p.days.size, Math.round(p.hours * 100) / 100, p.total, p.paid, p.total - p.paid]),
+      ],
+      [10, 9, 10, 11, 11, 11],
+    ),
+    '薪資結算',
+  );
+
+  XLSX.utils.book_append_sheet(
+    wb,
+    sheet(
+      [
+        ['請款日期', '工地', '請款金額', '收款期限', '已收', '未收', '最後收款日', '備註'],
+        ...[...invoices].sort(byDate).map((i) => [i.date, i.site, i.amount, i.dueDate || '', i.receivedAmount || 0, i.amount - (i.receivedAmount || 0), i.receivedDate || '', i.note]),
+      ],
+      [12, 18, 11, 12, 11, 11, 12, 24],
+    ),
+    '請款應收',
+  );
 
   const name = from <= '2000-01-01' ? 'JiangXin_all.xlsx' : `JiangXin_${from}_${to}.xlsx`;
   if (isNative()) {
