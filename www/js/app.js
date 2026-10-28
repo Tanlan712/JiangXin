@@ -6,6 +6,7 @@ import { initLedger, renderLedger } from './ledger.js';
 import { initSites, renderSites, allSites } from './sites.js';
 import { initReports, renderReports } from './reports.js';
 import { attachMic } from './voice.js';
+import { initUpdater } from './updater.js';
 
 const TITLES = { convert: '單位換算', crew: '工班紀錄', ledger: '收支帳務', sites: '工地與請款', reports: '報表與薪資' };
 
@@ -46,6 +47,7 @@ initReports();
 attachMic($('#invoice-form').note);
 onChange(renderAll);
 renderAll();
+initUpdater();
 
 if ('serviceWorker' in navigator && location.protocol === 'https:' && !window.Capacitor?.isNativePlatform?.()) {
   navigator.serviceWorker.register('sw.js');

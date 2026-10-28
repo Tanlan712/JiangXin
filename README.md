@@ -36,6 +36,12 @@
 
 打開過一次之後，沒網路也能使用。
 
+### 自動更新
+
+- **App**：打開時會自動檢查 GitHub 上有沒有新版，有的話在背景下載，問你要不要立即重新開啟套用（或下次開啟時自動套用）。也可以在「報表 → 備份與還原」按「檢查 App 更新」。資料不會受影響；新版若開不起來會自動退回上一版。
+- 只有原生部分改版（新增外掛、權限）時才需要重裝 APK，App 會提示並直接下載，點開選「更新」即可覆蓋，資料保留。
+- **PWA**：有網路時會在背景更新，下次打開就是新版。
+
 > 注意：APK 和 PWA 的資料是分開存的。如果要換用另一種，先用「匯出 → 下載備份檔」再到另一邊還原。
 
 ## 開發
@@ -45,7 +51,11 @@ www/                 App 本體（HTML / CSS / JS，不需要編譯）
   js/units.js        單位換算資料
   js/store.js        本機資料存取
   js/export.js       Excel 匯出、備份檔
+  js/updater.js      App 線上更新
+  js/build.js        版本資訊（打包時自動寫入）
   sw.js              離線快取
+scripts/stamp.mjs    寫入版本號、產生 version.json
+signing/             APK 固定簽章（debug key），讓新版能直接覆蓋安裝
 assets/              App 圖示原檔
 capacitor.config.json  Android App 設定
 .github/workflows/   自動打包 APK、發佈 PWA
@@ -54,3 +64,7 @@ capacitor.config.json  Android App 設定
 本機預覽：`npm run serve`，然後打開 http://localhost:8080
 
 打包 Android：`npm install && npm run android:prepare`，再用 Android Studio 開啟 `android/` 資料夾。推到 GitHub 時會自動打包 APK。
+
+發版流程（合併到預設分支後自動進行）：打包 APK 並發布到 Release `latest`，再把 `www/`、`version.json` 和更新包 `update/www-<編號>.zip` 部署到 GitHub Pages。App 比對 `version.json` 的 `build` 來線上更新。
+
+如果改了原生部分（新增或升級 Capacitor 外掛、改 `capacitor.config.json`），要把 `package.json` 的 `nativeVersion` 加 1，舊 App 才會提示重裝 APK，不會套用到不相容的網頁內容。

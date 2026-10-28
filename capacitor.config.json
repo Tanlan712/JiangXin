@@ -1,5 +1,13 @@
 {
   "appId": "tw.jiangxin.site",
   "appName": "匠心工地",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": false,
+      "statsUrl": "",
+      "resetWhenUpdate": true,
+      "appReadyTimeout": 10000
+    }
+  }
 }
