@@ -1,5 +1,5 @@
 // 離線快取：第一次打開後，所有檔案都存在手機裡，沒網路也能用
-const CACHE = 'jiangxin-v3';
+const CACHE = 'jiangxin-v4';
 const FILES = [
   './',
   './index.html',
@@ -17,6 +17,8 @@ const FILES = [
   './js/reports.js',
   './js/photos.js',
   './js/voice.js',
+  './js/build.js',
+  './js/updater.js',
   './vendor/xlsx.full.min.js',
   './vendor/fonts/material-symbols-rounded.woff2',
   './icons/icon-192.png',
@@ -39,6 +41,8 @@ self.addEventListener('activate', (e) => {
 // 先用快取（離線可用），同時在背景更新
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // 版本檔與更新包每次都要拿最新的，不放快取
+  if (/\/(version\.json|update\/)/.test(new URL(e.request.url).pathname)) return;
   e.respondWith(
     caches.match(e.request, { ignoreSearch: true }).then((cached) => {
       const fresh = fetch(e.request)

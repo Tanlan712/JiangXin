@@ -1,4 +1,4 @@
-name: Android APK
+name: Android APK + PWA
 
 on:
   push:
@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -27,8 +29,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # 版本號用 Actions 的執行編號，App 靠它判斷有沒有新版
+      - name: Stamp version
+        run: node scripts/stamp.mjs ${{ github.run_number }}
+
       - name: Generate Android project
         run: npm run android:prepare
+
+      # versionCode 每次都遞增，才能直接覆蓋安裝；固定簽章，否則每次打包簽章都不同、不能覆蓋
+      - name: Set version code and signing key
+        run: |
+          sed -i -E 's/versionCode [0-9]+/versionCode ${{ github.run_number }}/; s/versionName "[^"]*"/versionName "'"$(node -p 'require("./package.json").version')"'"/' android/app/build.gradle
+          grep -E 'versionCode|versionName' android/app/build.gradle
+          mkdir -p ~/.android
+          cp signing/debug.keystore ~/.android/debug.keystore
 
       - name: Build APK
         working-directory: android
@@ -42,13 +56,43 @@ jobs:
           name: JiangXin-apk
           path: JiangXin.apk
 
+      # GitHub Pages 內容：PWA 本體 + App 線上更新用的 version.json 與更新包
+      - name: Prepare Pages site
+        run: |
+          mkdir -p _site/update
+          cp -r www/. _site/
+          (cd www && zip -qr ../_site/update/www-${{ github.run_number }}.zip .)
+          node scripts/stamp.mjs ${{ github.run_number }} _site/version.json
+          cat _site/version.json
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+        with:
+          path: _site
+
       - name: Publish to "latest" release
         if: github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: 匠心工地（最新版）
-          body: 手機下載 JiangXin.apk 後點開安裝。第一次安裝需要允許「安裝不明來源的應用程式」。
+          body: 手機下載 JiangXin.apk 後點開安裝。第一次安裝需要允許「安裝不明來源的應用程式」。之後 App 會自動從網路更新，不用再重裝。
           prerelease: false
           make_latest: true
           files: JiangXin.apk
+
+  # APK 發布完才更新網站，App 提示「重裝 APK」時下載到的一定是新版
+  pages:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/deploy-pages@v4

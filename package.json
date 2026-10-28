@@ -1,6 +1,7 @@
 {
   "name": "jiangxin",
-  "version": "2.1.0",
+  "version": "2.2.0",
+  "nativeVersion": 2,
   "private": true,
   "description": "匠心工地：工地單位換算、工班紀錄、收支帳務（PWA + Android App）",
   "scripts": {
@@ -12,7 +13,8 @@
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@capacitor/filesystem": "^8.0.0",
-    "@capacitor/share": "^8.0.0"
+    "@capacitor/share": "^8.0.0",
+    "@capgo/capacitor-updater": "^8.54.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
