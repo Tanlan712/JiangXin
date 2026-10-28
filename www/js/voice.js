@@ -31,7 +31,7 @@ export async function listen() {
   });
 }
 
-// 在輸入框旁加上 🎤 按鈕；按了把辨識結果接在後面
+// 在輸入框旁加上麥克風按鈕；按了把辨識結果接在後面
 export function attachMic(input) {
   if (!voiceSupported()) return;
   const wrap = document.createElement('div');
@@ -41,7 +41,7 @@ export function attachMic(input) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'mic';
-  btn.textContent = '🎤';
+  btn.innerHTML = '<span class="ms" aria-hidden="true">mic</span>';
   btn.setAttribute('aria-label', '語音輸入');
   wrap.append(btn);
   btn.addEventListener('click', async () => {

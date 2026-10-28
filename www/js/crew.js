@@ -31,8 +31,8 @@ export function renderCrew() {
           ${thumbs(r.photos)}
         </div>
         <div class="actions">
-          <button class="icon-btn" data-edit="${r.id}" aria-label="編輯">✎</button>
-          <button class="icon-btn danger" data-del="${r.id}" aria-label="刪除">✕</button>
+          <button class="icon-btn" data-edit="${r.id}" aria-label="編輯"><span class="ms" aria-hidden="true">edit</span></button>
+          <button class="icon-btn danger" data-del="${r.id}" aria-label="刪除"><span class="ms" aria-hidden="true">delete</span></button>
         </div>
       </li>`,
     )

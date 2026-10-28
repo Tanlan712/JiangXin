@@ -4,17 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>匠心工地</title>
-  <meta name="theme-color" content="#e8790c">
+  <meta name="theme-color" content="#fff8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="匠心工地">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preload" href="vendor/fonts/material-symbols-rounded.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="topbar">
+    <span class="ms brand" aria-hidden="true">construction</span>
     <h1 id="page-title">單位換算</h1>
   </header>
 
@@ -118,13 +121,13 @@
     <section id="tab-crew" class="tab">
       <div class="card">
         <div class="row">
-          <button class="icon-btn" data-crew-shift="-1" aria-label="前一天">‹</button>
+          <button class="icon-btn" data-crew-shift="-1" aria-label="前一天"><span class="ms" aria-hidden="true">chevron_left</span></button>
           <input id="crew-day" type="date">
-          <button class="icon-btn" data-crew-shift="1" aria-label="後一天">›</button>
+          <button class="icon-btn" data-crew-shift="1" aria-label="後一天"><span class="ms" aria-hidden="true">chevron_right</span></button>
         </div>
         <div class="summary" id="crew-summary"></div>
         <ul class="list" id="crew-list"></ul>
-        <button type="button" class="block" id="crew-copy">📋 複製上一次的紀錄到這天</button>
+        <button type="button" class="block" id="crew-copy"><span class="ms" aria-hidden="true">content_copy</span>複製上一次的紀錄到這天</button>
       </div>
 
       <form class="card" id="crew-form">
@@ -143,7 +146,7 @@
         <label>工作內容／備註<input name="note" placeholder="例：二樓模板"></label>
         <div class="photo-field" id="crew-photos"></div>
         <div class="row">
-          <button type="submit" class="primary">儲存</button>
+          <button type="submit" class="primary"><span class="ms" aria-hidden="true">check</span>儲存</button>
           <button type="button" class="ghost" id="crew-cancel" hidden>取消編輯</button>
         </div>
       </form>
@@ -154,9 +157,9 @@
       <div class="banner" id="ledger-banner" hidden></div>
       <div class="card">
         <div class="row">
-          <button class="icon-btn" data-ledger-shift="-1" aria-label="上個月">‹</button>
+          <button class="icon-btn" data-ledger-shift="-1" aria-label="上個月"><span class="ms" aria-hidden="true">chevron_left</span></button>
           <input id="ledger-month" type="month">
-          <button class="icon-btn" data-ledger-shift="1" aria-label="下個月">›</button>
+          <button class="icon-btn" data-ledger-shift="1" aria-label="下個月"><span class="ms" aria-hidden="true">chevron_right</span></button>
         </div>
         <div class="totals" id="ledger-totals"></div>
         <div id="ledger-list"></div>
@@ -178,8 +181,8 @@
         <label>備註<input name="note"></label>
         <div class="photo-field" id="ledger-photos"></div>
         <div class="row">
-          <button type="submit" class="primary">儲存</button>
-          <button type="button" id="tpl-save">⭐ 存成常用</button>
+          <button type="submit" class="primary"><span class="ms" aria-hidden="true">check</span>儲存</button>
+          <button type="button" class="outlined" id="tpl-save"><span class="ms" aria-hidden="true">star</span>存成常用</button>
         </div>
         <button type="button" class="ghost block" id="ledger-cancel" hidden>取消編輯</button>
       </form>
@@ -216,7 +219,7 @@
         </div>
         <label>請款金額（元）<input name="amount" type="number" inputmode="decimal" required min="0" step="any"></label>
         <label>備註<input name="note" placeholder="例：第二期 結構完成"></label>
-        <button type="submit" class="primary block">記錄請款</button>
+        <button type="submit" class="primary block"><span class="ms" aria-hidden="true">receipt_long</span>記錄請款</button>
         <p class="hint">按「收款」會自動在帳務記一筆工程款收入。</p>
       </form>
     </section>
@@ -261,28 +264,28 @@
 
       <div class="card">
         <h2>匯出 Excel</h2>
-        <button class="primary block" id="ex-xlsx">匯出上面期間的 Excel</button>
+        <button class="primary block" id="ex-xlsx"><span class="ms" aria-hidden="true">table_view</span>匯出上面期間的 Excel</button>
         <p class="hint">工作表：工班紀錄、收支明細、每日收支、每月收支、薪資結算、請款應收。</p>
       </div>
 
       <div class="card">
         <h2>備份與還原</h2>
         <p class="hint" id="data-stats"></p>
-        <button class="block" id="bk-save">下載備份檔</button>
-        <button class="block" id="bk-load">從備份檔還原</button>
+        <button class="block" id="bk-save"><span class="ms" aria-hidden="true">download</span>下載備份檔</button>
+        <button class="block outlined" id="bk-load"><span class="ms" aria-hidden="true">upload</span>從備份檔還原</button>
         <input type="file" id="bk-file" accept=".json,application/json" hidden>
         <p class="hint">資料只存在這支手機裡。備份檔不含照片。</p>
-        <p class="hint">匠心工地 v2.0 · 可離線使用</p>
+        <p class="hint">匠心工地 v2.1 · 可離線使用</p>
       </div>
     </section>
   </main>
 
   <nav class="tabbar">
-    <button data-tab="convert" class="active"><span class="ico">📐</span>換算</button>
-    <button data-tab="crew"><span class="ico">👷</span>工班</button>
-    <button data-tab="ledger"><span class="ico">💰</span>帳務</button>
-    <button data-tab="sites"><span class="ico">🏗️</span>工地</button>
-    <button data-tab="reports"><span class="ico">📊</span>報表</button>
+    <button data-tab="convert" class="active"><span class="ind"><span class="ms" aria-hidden="true">straighten</span></span>換算</button>
+    <button data-tab="crew"><span class="ind"><span class="ms" aria-hidden="true">engineering</span></span>工班</button>
+    <button data-tab="ledger"><span class="ind"><span class="ms" aria-hidden="true">payments</span></span>帳務</button>
+    <button data-tab="sites"><span class="ind"><span class="ms" aria-hidden="true">apartment</span></span>工地</button>
+    <button data-tab="reports"><span class="ind"><span class="ms" aria-hidden="true">bar_chart</span></span>報表</button>
   </nav>
 
   <datalist id="dl-sites"></datalist>
@@ -293,7 +296,7 @@
     <div class="dialog" role="dialog" aria-modal="true">
       <p id="confirm-msg"></p>
       <div class="row">
-        <button type="button" id="confirm-cancel">取消</button>
+        <button type="button" class="text" id="confirm-cancel">取消</button>
         <button type="button" class="primary" id="confirm-ok">確定</button>
       </div>
     </div>

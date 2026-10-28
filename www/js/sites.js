@@ -88,7 +88,7 @@ function invoiceRow(i) {
     </div>
     <div class="actions">
       ${left > 0 ? '<button type="button" class="small-btn" data-receive>收款</button>' : ''}
-      <button class="icon-btn danger" data-inv-del aria-label="刪除請款">✕</button>
+      <button class="icon-btn danger" data-inv-del aria-label="刪除請款"><span class="ms" aria-hidden="true">delete</span></button>
     </div>
   </li>`;
 }
