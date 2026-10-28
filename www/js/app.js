@@ -34,6 +34,8 @@ document.addEventListener('click', (e) => {
   const go = e.target.closest('[data-goto]');
   if (go) showTab(go.dataset.goto);
 });
+const topbar = $('.topbar');
+addEventListener('scroll', () => topbar.classList.toggle('scrolled', scrollY > 4), { passive: true });
 $('#viewer').addEventListener('click', () => ($('#viewer').hidden = true));
 
 initConvert();

@@ -1,5 +1,5 @@
 // 離線快取：第一次打開後，所有檔案都存在手機裡，沒網路也能用
-const CACHE = 'jiangxin-v2';
+const CACHE = 'jiangxin-v3';
 const FILES = [
   './',
   './index.html',
@@ -18,6 +18,7 @@ const FILES = [
   './js/photos.js',
   './js/voice.js',
   './vendor/xlsx.full.min.js',
+  './vendor/fonts/material-symbols-rounded.woff2',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',

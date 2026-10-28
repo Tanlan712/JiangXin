@@ -83,8 +83,8 @@ export class PhotoField {
     this.removed = [];
     container.innerHTML = `
       <div class="photo-buttons">
-        <label class="btn-like">📷 拍照<input type="file" accept="image/*" capture="environment" hidden></label>
-        <label class="btn-like">🖼️ 相簿<input type="file" accept="image/*" multiple hidden></label>
+        <label class="btn-like"><span class="ms" aria-hidden="true">photo_camera</span>拍照<input type="file" accept="image/*" capture="environment" hidden></label>
+        <label class="btn-like"><span class="ms" aria-hidden="true">photo_library</span>相簿<input type="file" accept="image/*" multiple hidden></label>
       </div>
       <div class="thumbs editable"></div>`;
     container.querySelectorAll('input[type=file]').forEach((input) =>
@@ -122,7 +122,7 @@ export class PhotoField {
   render() {
     const box = this.el.querySelector('.thumbs');
     box.innerHTML = this.ids
-      .map((id) => `<span class="thumb"><img data-photo="${esc(id)}" alt="照片"><button type="button" data-rm="${esc(id)}" aria-label="移除照片">✕</button></span>`)
+      .map((id) => `<span class="thumb"><img data-photo="${esc(id)}" alt="照片"><button type="button" data-rm="${esc(id)}" aria-label="移除照片"><span class="ms" aria-hidden="true">close</span></button></span>`)
       .join('');
     hydrate(box);
   }

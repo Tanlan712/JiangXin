@@ -31,7 +31,7 @@ function renderTemplates() {
     ? list
         .map(
           (t) =>
-            `<span class="chip tpl ${t.type}"><button type="button" data-tpl="${t.id}">${esc(t.label)}</button><button type="button" class="x" data-tpl-del="${t.id}" aria-label="刪除常用">✕</button></span>`,
+            `<span class="chip tpl ${t.type}"><button type="button" data-tpl="${t.id}">${esc(t.label)}</button><button type="button" class="x" data-tpl-del="${t.id}" aria-label="刪除常用"><span class="ms" aria-hidden="true">close</span></button></span>`,
         )
         .join('')
     : '<span class="hint">填好下面的表單後按「存成常用」，下次一鍵帶入。</span>';
@@ -80,8 +80,8 @@ export function renderLedger() {
                 </div>
                 <b class="${r.type === 'income' ? 'pos' : 'neg'}">${r.type === 'income' ? '+' : '−'}${money(r.amount)}</b>
                 <div class="actions">
-                  <button class="icon-btn" data-edit="${r.id}" aria-label="編輯">✎</button>
-                  <button class="icon-btn danger" data-del="${r.id}" aria-label="刪除">✕</button>
+                  <button class="icon-btn" data-edit="${r.id}" aria-label="編輯"><span class="ms" aria-hidden="true">edit</span></button>
+                  <button class="icon-btn danger" data-del="${r.id}" aria-label="刪除"><span class="ms" aria-hidden="true">delete</span></button>
                 </div>
               </li>`,
               )
